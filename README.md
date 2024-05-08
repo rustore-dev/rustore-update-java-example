@@ -16,7 +16,7 @@
 
 Требования для разработчика/приложения:
 
-- Android 6 (SDK 23)
+- Android 7 (SDK 23)
 
 - ApplicationId, указанный в build.gradle, совпадает с applicationId apk-файла, который вы публиковали в консоль RuStore:
 
@@ -93,7 +93,11 @@ ruStoreAppUpdateManager.unregisterListener(installStateUpdateListener)
 После того как обновление скачано, можно запускать установку. После запуска установки приложение автоматически закроется.
 
 ```
-ruStoreAppUpdateManager.completeUpdate()
+int type = AppUpdateType.IMMEDIATE;
+        ruStoreAppUpdateManager.completeUpdate(new AppUpdateOptions.Builder().appUpdateType(type).build())
+                .addOnFailureListener(throwable -> {
+                    Log.d("RuStoreUpdate", "Throwable: " + throwable);
+                });
 ```
 
 ### Есть вопросы

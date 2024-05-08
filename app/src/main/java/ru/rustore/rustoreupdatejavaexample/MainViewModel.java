@@ -12,6 +12,7 @@ import ru.rustore.sdk.appupdate.listener.InstallStateUpdateListener;
 import ru.rustore.sdk.appupdate.manager.RuStoreAppUpdateManager;
 import ru.rustore.sdk.appupdate.manager.factory.RuStoreAppUpdateManagerFactory;
 import ru.rustore.sdk.appupdate.model.AppUpdateOptions;
+import ru.rustore.sdk.appupdate.model.AppUpdateType;
 import ru.rustore.sdk.appupdate.model.InstallStatus;
 import ru.rustore.sdk.appupdate.model.UpdateAvailability;
 
@@ -79,7 +80,11 @@ public class MainViewModel extends ViewModel {
     }
 
     public void completeUpdateRequested() {
-        ruStoreAppUpdateManager.completeUpdate();
+        int type = AppUpdateType.IMMEDIATE;
+        ruStoreAppUpdateManager.completeUpdate(new AppUpdateOptions.Builder().appUpdateType(type).build())
+                .addOnFailureListener(throwable -> {
+                    Log.d("RuStoreUpdate", "Throwable: " + throwable);
+                });
     }
 
     public enum Event {
