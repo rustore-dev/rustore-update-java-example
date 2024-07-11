@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.ApkSigningConfig
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
@@ -8,13 +11,28 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.rustore.rustoreupdatejavaexample"
+        applicationId = "ru.rustore.sdk.appupdatejavaexample"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        signingConfigs {
+            // Замените на свою подпись!
+            val debugStoreFile = rootProject.file("cert/release.keystore")
+            val debugPropsFile = rootProject.file("cert/release.properties")
+            val debugProps = Properties()
+            debugPropsFile.inputStream().use(debugProps::load)
+            val debugSigningConfig = getByName<ApkSigningConfig>("debug") {
+                storeFile = debugStoreFile
+                keyAlias = debugProps.getProperty("key_alias")
+                keyPassword = debugProps.getProperty("key_password")
+                storePassword = debugProps.getProperty("store_password")
+            }
+            signingConfig = debugSigningConfig
+        }
     }
 
     buildTypes {
@@ -24,6 +42,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName<ApkSigningConfig>("debug")
         }
     }
     compileOptions {

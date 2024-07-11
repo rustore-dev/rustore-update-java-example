@@ -3,11 +3,9 @@ package ru.rustore.rustoreupdatejavaexample;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import ru.rustore.sdk.appupdate.listener.InstallStateUpdateListener;
 import ru.rustore.sdk.appupdate.manager.RuStoreAppUpdateManager;
 import ru.rustore.sdk.appupdate.manager.factory.RuStoreAppUpdateManagerFactory;
@@ -80,7 +78,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void completeUpdateRequested() {
-        int type = AppUpdateType.IMMEDIATE;
+        int type = AppUpdateType.SILENT;
         ruStoreAppUpdateManager.completeUpdate(new AppUpdateOptions.Builder().appUpdateType(type).build())
                 .addOnFailureListener(throwable -> {
                     Log.d("RuStoreUpdate", "Throwable: " + throwable);
